@@ -1,0 +1,139 @@
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<%- include('partials/header', { user }) %>
+
+<div class="flex max-w-7xl mx-auto px-6 py-10 bg-gray-50 min-h-screen gap-6">
+
+  <!-- Cart Table -->
+  <div class="flex-1">
+    <h2 class="text-3xl font-bold mb-6 text-gray-800">Your Cart</h2>
+
+    <% if (cart.length === 0) { %>
+      <p>Your cart is empty.</p>
+    <% } else { %>
+      <table class="w-full border-collapse border border-gray-300">
+        <thead>
+          <tr>
+            <th class="border border-gray-300 p-2">Product</th>
+            <th class="border border-gray-300 p-2">Price</th>
+            <th class="border border-gray-300 p-2">Quantity</th>
+            <th class="border border-gray-300 p-2">Total</th>
+            <th class="border border-gray-300 p-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="cart-items">
+          <% cart.forEach(item => { %>
+            <tr data-id="<%= item.id %>" data-price="<%= item.product.price %>" data-quantity="<%= item.quantity %>">
+              <td class="border border-gray-300 p-2 flex items-center gap-3">
+                <% if(item.product.image) { %>
+                  <img src="/uploads/<%= item.product.image %>" alt="<%= item.product.title %>" class="w-16 h-16 object-cover rounded">
+                <% } %>
+                <span><%= item.product.title %></span>
+              </td>
+              <td class="border border-gray-300 p-2">₹<%= item.product.price %></td>
+              <td class="border border-gray-300 p-2  items-right justify-left gap-5">
+                <button class="decrement-btn bg-gray-200 px-3 rounded">-</button>
+                <span class="quantity"><%= item.quantity %></span>
+                <button class="increment-btn bg-gray-200 px-3 rounded">+</button>
+              </td>
+              <td class="border border-gray-300 p-2 total-cell">₹<%= item.product.price * item.quantity %></td>
+              <td class="border border-gray-300 p-2">
+                <button class="remove-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Remove</button>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+
+      <div class="mt-6">
+        <a href="/payment" 
+           class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded font-semibold">
+          Proceed to Payment
+        </a>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Total Price Box -->
+  <div class="w-64 bg-white shadow-lg rounded-lg p-6 h-fit sticky top-10">
+    <h3 class="text-xl font-bold mb-4 text-gray-700">Total Amount</h3>
+    <p class="text-2xl font-semibold text-gray-800" id="total-price">₹0</p>
+  </div>
+
+</div>
+
+<script>
+  async function updateTotal() {
+    const rows = document.querySelectorAll('#cart-items tr');
+    let total = 0;
+    rows.forEach(row => {
+      const price = parseFloat(row.dataset.price);
+      const quantity = parseInt(row.dataset.quantity);
+      total += price * quantity;
+      row.querySelector('.total-cell').innerText = '₹' + (price * quantity);
+      row.querySelector('.quantity').innerText = quantity;
+    });
+    document.getElementById('total-price').innerText = '₹' + total;
+    localStorage.setItem('totalAmount', total);
+  }
+
+  function setupRemoveButtons() {
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const row = e.target.closest('tr');
+        const itemId = row.dataset.id;
+
+        const res = await fetch('/cart/remove/' + itemId, { method: 'POST' });
+        if (res.ok) {
+          row.remove();
+          updateTotal();
+        } else {
+          alert('Failed to remove item');
+        }
+      });
+    });
+  }
+
+  function setupIncrementDecrement() {
+    document.querySelectorAll('.increment-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const row = e.target.closest('tr');
+        let quantity = parseInt(row.dataset.quantity);
+        quantity += 1;
+        row.dataset.quantity = quantity;
+
+        const itemId = row.dataset.id;
+        await fetch('/cart/update-quantity/' + itemId, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ quantity })
+        });
+
+        updateTotal();
+      });
+    });
+
+    document.querySelectorAll('.decrement-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const row = e.target.closest('tr');
+        let quantity = parseInt(row.dataset.quantity);
+        if (quantity > 1) quantity -= 1;
+        row.dataset.quantity = quantity;
+
+        const itemId = row.dataset.id;
+        await fetch('/cart/update-quantity/' + itemId, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ quantity })
+        });
+
+        updateTotal();
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    updateTotal();
+    setupRemoveButtons();
+    setupIncrementDecrement();
+  });
+</script>

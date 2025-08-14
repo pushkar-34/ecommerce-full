@@ -1,0 +1,146 @@
+[
+  {
+    "id": "bb0c446f-0502-4dfa-8964-520f99c1b1a7",
+    "title": "nike shoes",
+    "price": "500",
+    "description": "best shoes ever",
+    "image": "de9477ae-577e-4a13-8628-4a02c4d2efac.png",
+    "ownerId": 1754892814195
+  },
+  {
+    "id": "a86ba7fc-acc4-4440-a34d-cde89cb1f74f",
+    "title": "watch",
+    "price": "3200",
+    "description": "best watch and mostly buyied",
+    "image": "e74aac63-00e5-4a41-96d2-e1855bff2045.png",
+    "ownerId": 1754892814195
+  },
+  {
+    "id": "14f4265d-e5e8-4dd5-ab6a-a9dc04685a6e",
+    "title": "white t-shirt",
+    "price": "570",
+    "description": "best pure white shirt ",
+    "image": "5b6640e0-5a51-4d18-82b4-2e340525e21a.png",
+    "ownerId": 1754892814195
+  },
+  {
+    "id": "e8723ac3-d954-4835-aee4-976963369644",
+    "title": "toy car",
+    "price": "799",
+    "description": "yellow lamborghini toy car ",
+    "image": "3b76a89f-1022-45be-a132-d2ecb0442117.png",
+    "ownerId": 1754892814195
+  },
+  {
+    "id": "b14b5cb5-2733-4b73-91cf-cb131035b0f7",
+    "title": "Iphone 16 (128 GB)",
+    "price": "79899",
+    "description": "iphone 16 128 gb white colour",
+    "image": "f52496df-8205-4ad0-a5f5-d656f8679441.png",
+    "ownerId": 1754892814195
+  },
+  {
+    "id": "8ef904b2-43c3-40cd-8de4-1115b099a929",
+    "title": "black cap ",
+    "price": "600",
+    "description": "full black cap with nike icon ",
+    "image": "86e5b298-ba3e-4c38-8e99-994cffb3375f.png",
+    "ownerId": 1754892814195
+  },
+  {
+    "id": "0615a93d-1f23-41d9-9a49-aa113cb08d6d",
+    "title": "Straight fit jeans ",
+    "price": "799",
+    "description": "black straight fit jeans ",
+    "image": "d3a665e0-fe8f-495e-856b-a3421b7b37e2.png",
+    "ownerId": 1754892814195
+  },
+  {
+    "id": "2d2e6338-cb12-4efe-a900-177a76022f2f",
+    "title": "man Jaacket",
+    "price": "1499",
+    "description": "man jacket full black style",
+    "image": "5d88ab2d-33ec-4df8-839e-3403ecf3bafa.png",
+    "ownerId": 1754892814195
+  },
+  {
+    "id": "74ff121a-9e18-4257-a1f6-921748974057",
+    "title": "Ray Ban glasses",
+    "price": "5999",
+    "description": "Best stylish Ray Ban glasses ",
+    "image": "6a98d0f5-bf33-4168-b403-24d38ce8120c.png",
+    "ownerId": 1754892814195
+  },
+  {
+    "id": "7fde52b5-a81d-48ce-9c6d-46d85db59266",
+    "title": "Eletric Air coolar",
+    "price": "17999",
+    "description": "best air coolar best condition ",
+    "image": "2c1e52d5-14bb-4926-bc39-a9231915ea2a.png",
+    "ownerId": 1754892814195
+  },
+  {
+    "id": "c5ace4c1-8b3c-47e2-9daf-4fcc61d4d6b7",
+    "title": "Air Conditionar",
+    "price": "42799",
+    "description": "Best cooling Air conditionar",
+    "image": "053e0111-83ba-4ffb-b719-01f5484cad1a.png",
+    "ownerId": 1754892814195
+  },
+  {
+    "id": "0a42eaa4-f19c-4ff2-8725-6ef204a612b8",
+    "title": "Room Heater",
+    "price": "4999",
+    "description": "Eletric Room Heater fast and safe  ",
+    "image": "2bee9c46-b770-43d2-962f-8c9866067422.png",
+    "ownerId": 1754892814195
+  },
+  {
+    "id": "bd72082b-b3cf-4e37-8bb2-159f1c6e4f54",
+    "title": "Man Jacket ",
+    "price": "1250",
+    "description": "Man Jacket stylish black colour",
+    "image": "7c2aecef-5e47-46d5-8b38-657784d6b633.png",
+    "ownerId": 1754892814195
+  },
+  {
+    "id": "0097cb89-3527-4e98-8387-f0b184cf7f4d",
+    "title": "man watch",
+    "price": "799",
+    "description": "goldan colour watch best watch for man adjustable size watch",
+    "image": "e6c12286-1cf1-4882-b7cb-68f775d3a103.png",
+    "ownerId": 1754892814195
+  },
+  {
+    "id": "b57947a5-6744-46c1-adff-d67e9eaedbb0",
+    "title": "Woman watch",
+    "price": "399",
+    "description": "Stylish watch for woman",
+    "image": "41087d40-5bd4-432d-bd8f-35aa5c34e88c.png",
+    "ownerId": 1754892814195
+  },
+  {
+    "id": "b050e4dd-8410-4b9f-a6ab-5e413ea5df37",
+    "title": "man t-shirt ",
+    "price": "999",
+    "description": "Jaat printed t-shirt for boys ",
+    "image": "82a389e5-e68e-4a72-89a4-727a0d293c5e.png",
+    "ownerId": 1754892814195
+  },
+  {
+    "id": "8dbad9b2-ceef-4d2f-aa34-22178d90e8fc",
+    "title": "man shoes",
+    "price": "3999",
+    "description": "black formal stylish shoes for man ",
+    "image": "886a3db3-3846-4d50-9069-588c07038623.png",
+    "ownerId": 1754981494486
+  },
+  {
+    "id": "3988fae1-86e4-4822-9a07-c467ab1d9e1c",
+    "title": "i phone",
+    "price": 1,
+    "description": "ftghhk",
+    "image": "945d5537-36eb-438b-a802-ab2379a6a581.png",
+    "ownerId": 1754892814195
+  }
+]

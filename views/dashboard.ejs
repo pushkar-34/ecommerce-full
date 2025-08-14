@@ -1,0 +1,160 @@
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<%- include('partials/header', { user: user }) %>
+
+<div class="bg-white shadow-sm border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <span class="text-gray-800 text-m font-bold">Welcome, <%= user.username %> </span>
+    <form action="/products/search" method="GET" class="flex items-center space-x-2">
+      <input type="text" name="q" placeholder="Search products..."
+        class="border border-gray-300 px-3 py-1 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+      <button type="submit"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-lg text-sm transition">
+        Search
+      </button>
+    </form>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-6 py-10 bg-gray-50 min-h-screen">
+
+  <% if (user && user.isAdmin) { %>
+  
+  <button id="toggleAddProductBtn"
+    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium mb-4 shadow">
+    ➕ Add Product
+  </button>
+
+ 
+  <div id="addProductForm" class="bg-white shadow-lg rounded-xl p-6 mb-10 border border-gray-200 hidden">
+    <h3 class="text-2xl font-semibold mb-5 text-gray-700">Add a New Product</h3>
+    <form action="/products/add" method="POST" enctype="multipart/form-data" class="space-y-4">
+      <input type="text" name="title" placeholder="Product Title" required
+        class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none">
+      <input type="number" name="price" placeholder="Price" required
+        class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none">
+      <textarea name="description" placeholder="Product Description" required
+        class="w-full border border-gray-300 px-4 py-2 rounded-lg h-24 resize-none focus:ring-2 focus:ring-blue-400 outline-none"></textarea>
+      <input type="file" name="image" accept="image/*" required
+        class="w-full border border-gray-300 px-4 py-2 rounded-lg">
+      <button type="submit"
+        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition duration-200 shadow">
+        Save Product
+      </button>
+    </form>
+  </div>
+<% } %>
+
+
+  <h3 class="text-3xl font-bold mb-6 text-gray-800">Available Products</h3>
+  <div id="product-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+    <% products.forEach((p, index) => { 
+         const words = p.description ? p.description.split(" ") : [];
+         let shortDesc = '';
+         let showReadMore = false;
+
+         if(words.length === 1 && words[0].length > 8) {
+           shortDesc = words[0].substring(0, 8);
+           showReadMore = true;
+         } else if(words.length > 3) {
+           shortDesc = words.slice(0, 3).join(" ");
+           showReadMore = true;
+         } else {
+           shortDesc = p.description || '';
+           showReadMore = false;
+         }
+    %>
+      <div
+        class="product-card <% if (index >= 15) { %>hidden<% } %> bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 flex flex-col">
+        
+        <% if (p.image) { %>
+          <img src="/uploads/<%= p.image %>" alt="<%= p.title %>"
+            class="w-full h-44 object-cover rounded-t-xl">
+        <% } else { %>
+          <div
+            class="w-full h-44 bg-gray-200 flex items-center justify-center text-gray-500 rounded-t-xl text-lg font-medium">
+            No Image
+          </div>
+        <% } %>
+
+        <div class="p-4 flex flex-col flex-1">
+          <h4 class="text-base font-bold mb-1 text-gray-800"><%= p.title %></h4>
+          <p class="text-green-600 font-semibold text-sm mb-2">₹<%= p.price %></p>
+
+          <% if (p.description) { %>
+            <% if(showReadMore) { %>
+              <p class="text-gray-600 text-xs mb-3">
+                <span class="short-desc"><%= shortDesc %>...</span>
+                <span class="full-desc hidden"><%= p.description %></span>
+                <button type="button" class="text-blue-500 text-xs read-more">Read More</button>
+              </p>
+            <% } else { %>
+              <p class="text-gray-600 text-xs mb-3"><%= p.description %></p>
+            <% } %>
+          <% } %>
+
+          <% if (user && user.isAdmin && p.ownerId === user.id) { %>
+            <div class="flex gap-2 mb-2">
+              <a href="/products/edit/<%= p.id %>" 
+                class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 text-xs rounded shadow text-center">
+                 Edit
+              </a>
+              <form action="/products/delete/<%= p.id %>" method="POST" class="flex-1"
+                onsubmit="return confirm('Are you sure you want to delete this product?')">
+                <button type="submit" 
+                  class="w-full bg-red-500 hover:bg-red-600 text-white px-2 py-1 text-xs rounded shadow">
+                  Delete
+                </button>
+              </form>
+            </div>
+          <% } %>
+
+          <form action="/cart/add" method="POST" class="mt-auto">
+            <input type="hidden" name="productId" value="<%= p.id %>">
+            <button type="submit"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg transition text-sm font-medium shadow">
+              Add to Cart
+            </button>
+          </form>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+
+  <% if (products.length > 15) { %>
+    <div class="text-center mt-6">
+      <button id="see-more-btn"
+        class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition text-sm font-medium shadow">
+        See More
+      </button>
+    </div>
+  <% } %>
+
+</div>
+
+<script>
+  document.getElementById('toggleAddProductBtn')?.addEventListener('click', function () {
+  document.getElementById('addProductForm').classList.toggle('hidden');
+});
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('read-more')) {
+    const parent = e.target.closest('p');
+    parent.querySelector('.short-desc').classList.toggle('hidden');
+    parent.querySelector('.full-desc').classList.toggle('hidden');
+    e.target.textContent = e.target.textContent === 'Read More' ? 'Read Less' : 'Read More';
+  }
+});
+
+document.getElementById('see-more-btn')?.addEventListener('click', function() {
+  const hiddenProducts = document.querySelectorAll('.product-card.hidden');
+  let counter = 0;
+  hiddenProducts.forEach(card => {
+    if (counter < 15) {
+      card.classList.remove('hidden');
+      counter++;
+    }
+  });
+  if (document.querySelectorAll('.product-card.hidden').length === 0) {
+    this.style.display = 'none';
+  }
+});
+</script>

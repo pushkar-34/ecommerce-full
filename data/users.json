@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1754892814195,
+    "username": "pushkar",
+    "email": "pushkarsheoran001@gmail.com",
+    "password": "123456",
+    "isAdmin": "on",
+    "isVerified": true
+  },
+  {
+    "id": 1754892920021,
+    "username": "pushkar sheoran",
+    "email": "pushkarsheoran277@gmail.com",
+    "password": "123",
+    "isAdmin": false,
+    "isVerified": true
+  },
+  {
+    "id": 1754981494486,
+    "username": "dikshit",
+    "email": "2004dikshityadav@gmail.com",
+    "password": "123",
+    "isAdmin": "on",
+    "isVerified": true
+  }
+]

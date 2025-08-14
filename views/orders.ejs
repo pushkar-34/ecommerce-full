@@ -1,0 +1,46 @@
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<%- include('partials/header', { user: user }) %>
+
+<h2 class="text-2xl font-bold mb-4"><%= user.isAdmin ? 'Manage Orders' : 'My Orders' %></h2>
+
+<% if (orders.length === 0) { %>
+  <p>No orders found.</p>
+<% } else { %>
+  <table class="w-full border text-left">
+    <thead>
+      <tr>
+        <th class="border p-2">Order ID</th>
+        <th class="border p-2">Product ID</th>
+        <th class="border p-2">User ID</th>
+        <th class="border p-2">Status</th>
+        <% if (user.isAdmin) { %><th class="border p-2">Action</th><% } %>
+      </tr>
+    </thead>
+    <tbody>
+      <% orders.forEach(o => { %>
+        <tr>
+          
+          <td class="border p-2"><%= o.id %></td>
+          <td class="border p-2"><%= o.productId %></td>
+          <td class="border p-2"><%= o.email %></td>
+          <td class="border p-2"><%= o.userId %></td>
+          <td class="border p-2"><%= o.status %></td>
+          <% if (user.isAdmin) { %>
+            <td class="border p-2">
+              <form action="/orders/update" method="POST" class="flex space-x-2">
+                <input type="hidden" name="orderId" value="<%= o.id %>">
+                <select name="status" class="border rounded px-2 py-1">
+                  <option value="Pending">Pending</option>
+                  <option value="Shipped">Shipped</option>
+                  <option value="Delivered">Delivered</option>
+                </select>
+                <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded">Update</button>
+              </form>
+            </td>
+          <% } %>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+<% } %>
+

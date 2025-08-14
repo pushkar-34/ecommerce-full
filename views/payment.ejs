@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+    <h1 class="text-2xl font-bold text-center mb-6">Choose Payment Method</h1>
+
+    
+    <div class="mb-6 space-y-4">
+      <input type="email" id="userEmail" placeholder="Enter Email"
+        class="w-full border border-gray-300 rounded-lg p-2" required>
+      <input type="text" id="userContact" placeholder="Enter Contact Number"
+        class="w-full border border-gray-300 rounded-lg p-2" required>
+    </div>
+
+    
+    <form id="codForm" class="mb-6">
+      <h2 class="text-lg font-semibold mb-2">Cash on Delivery (COD)</h2>
+      <input type="text" name="address" placeholder="Enter Delivery Address"
+        class="w-full border border-gray-300 rounded-lg p-2 mb-4" required />
+
+      <button type="submit"
+        class="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition">
+        Place Order (COD)
+      </button>
+    </form>
+
+    <div class="flex items-center justify-center my-4">
+      <span class="text-gray-400 text-sm">OR</span>
+    </div>
+
+    
+    <form id="upiForm">
+      <h2 class="text-lg font-semibold mb-2">Pay via UPI</h2>
+      <input type="text" name="address" placeholder="Enter Delivery Address"
+        class="w-full border border-gray-300 rounded-lg p-2 mb-4" required />
+
+      <input type="number" name="amount" id="upiAmount" placeholder="Enter Amount"
+        class="w-full border border-gray-300 rounded-lg p-2 mb-4" readonly />
+
+      <button type="submit"
+        class="w-full bg-indigo-500 text-white py-2 rounded-lg hover:bg-indigo-600 transition">
+        Pay Now (UPI)
+      </button>
+    </form>
+  </div>
+
+  <script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const totalAmount = localStorage.getItem("totalAmount") || 0;
+      document.getElementById("upiAmount").value = totalAmount;
+
+      // Optionally pre-fill email if stored
+      const savedEmail = localStorage.getItem("userEmail") || "";
+      const savedContact = localStorage.getItem("userContact") || "";
+      document.getElementById("userEmail").value = savedEmail;
+      document.getElementById("userContact").value = savedContact;
+    });
+
+    // COD Payment
+    document.getElementById('codForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const address = e.target.address.value;
+      const userEmail = document.getElementById("userEmail").value;
+      const userContact = document.getElementById("userContact").value;
+
+      localStorage.setItem("userEmail", userEmail);
+      localStorage.setItem("userContact", userContact);
+
+      const res = await fetch('/payment/cod', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          address,
+          cartItems: JSON.parse(localStorage.getItem('cart') || '[]'),
+          userEmail,
+          userContact
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert('COD Order placed successfully!');
+        localStorage.removeItem('cart');
+        localStorage.removeItem('totalAmount');
+        window.location.href = '/my-orders';
+      } else {
+        alert('Failed to place COD order');
+      }
+    });
+
+    // UPI Payment
+    document.getElementById('upiForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const address = e.target.address.value;
+      const amount = document.getElementById("upiAmount").value;
+      const userEmail = document.getElementById("userEmail").value;
+      const userContact = document.getElementById("userContact").value;
+
+      localStorage.setItem("userEmail", userEmail);
+      localStorage.setItem("userContact", userContact);
+
+      const res = await fetch('/payment/upi/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        const options = {
+          key: "rzp_test_6DRWWpthvml3sQ",
+          amount: amount * 100,
+          currency: "INR",
+          name: "My Store",
+          description: "UPI Payment",
+          order_id: data.order.id,
+          handler: async function (response) {
+            const verifyRes = await fetch('/payment/upi/verify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                cartItems: JSON.parse(localStorage.getItem('cart') || '[]'),
+                userEmail,
+                userContact,
+                address
+              })
+            });
+            const verifyData = await verifyRes.json();
+            if (verifyData.success) {
+              alert('UPI Payment Successful!');
+              localStorage.removeItem('cart');
+              localStorage.removeItem('totalAmount');
+              window.location.href = '/my-orders';
+            } else {
+              alert('Payment verification failed');
+            }
+          },
+          theme: { color: "#4f46e5" }
+        };
+        const rzp = new Razorpay(options);
+        rzp.open();
+      } else {
+        alert('Failed to create UPI order');
+      }
+    });
+  </script>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</body>
+</html>

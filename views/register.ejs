@@ -1,0 +1,29 @@
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<%- include('partials/header', { user: user }) %>
+
+<div class="flex justify-center mt-10">
+  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Register</h2>
+    
+    <form action="/register" method="POST" class="space-y-5">
+      <input type="text" name="username" placeholder="Username" required 
+        class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+      <input type="email" name="email" placeholder="Email" required 
+        class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+      <input type="password" name="password" placeholder="Password" required 
+        class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+      <label class="flex items-center space-x-2 text-gray-700">
+        <input type="checkbox" name="isAdmin" class="h-4 w-4 text-blue-500 focus:ring-blue-400 border-gray-300 rounded">
+        <span>Register as Admin</span>
+      </label>
+
+      <button type="submit" 
+        class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg transition duration-200">
+        Register
+      </button>
+    </form>
+  </div>
+</div>
