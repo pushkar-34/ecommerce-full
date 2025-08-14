@@ -1,2 +1,0 @@
-# ecommerce-full
-e commerce
